@@ -28,4 +28,4 @@ export const circleColor: ExpressionSpecification = [
   theme.colors.free,
 ];
 
-export const circleRadius: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, 3, 12, 6, 16, 9];
+export const circleRadius: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, 4.5, 12, 9, 16, 13.5];
