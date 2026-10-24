@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Header } from '../components/Header';
@@ -8,6 +8,7 @@ import { PARKING_SITES_MIN_ZOOM } from '../components/map/mapStyle';
 import { ParkingMap } from '../components/map/ParkingMap';
 import { ParkingSitePanel } from '../components/map/ParkingSitePanel';
 import { useLanguage } from '../i18n/LanguageContext';
+import { routes } from '../i18n/routes';
 import type { PurposeType } from '../lib/api';
 
 const purposes: PurposeType[] = ['CAR', 'BIKE', 'MOTORCYCLE', 'ITEM'];
@@ -53,6 +54,21 @@ const FilterButton = styled.button<{ $active: boolean }>`
 
   &:hover {
     background: ${({ theme, $active }) => ($active ? theme.colors.primaryDark : theme.colors.surface)};
+  }
+`;
+
+// The imprint and privacy policy have to be reachable from every page, the map has no footer to carry them.
+const LegalLinks = styled.nav`
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  background: ${({ theme }) => theme.colors.overlay};
+  border-radius: ${({ theme }) => theme.radius};
+  box-shadow: ${({ theme }) => theme.shadow};
+  font-size: 0.8rem;
+
+  a {
+    color: ${({ theme }) => theme.colors.muted};
   }
 `;
 
@@ -116,6 +132,10 @@ export function MapPage() {
           ))}
         </Filter>
         <Legend />
+        <LegalLinks aria-label={t.map.legal}>
+          <Link to={routes.imprint}>{t.pageTitles.imprint}</Link>
+          <Link to={routes.privacy}>{t.pageTitles.privacy}</Link>
+        </LegalLinks>
       </Controls>
     </Page>
   );

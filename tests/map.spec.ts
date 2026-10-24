@@ -49,6 +49,16 @@ test.describe('map', () => {
     expect(new URL(page.url()).search).toBe('');
   });
 
+  test('links the imprint and the privacy policy', async ({ page }) => {
+    await page.goto('/');
+
+    const legal = page.getByRole('navigation', { name: 'Rechtliches' });
+    await expect(legal.getByRole('link', { name: 'Impressum' })).toBeVisible();
+    await legal.getByRole('link', { name: 'Datenschutz' }).click();
+
+    await expect(page).toHaveURL(/\/privacy$/);
+  });
+
   test('reports a parking site that cannot be loaded', async ({ page }) => {
     await page.goto('/?site=999');
 
