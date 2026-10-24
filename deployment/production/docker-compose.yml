@@ -1,0 +1,46 @@
+# Production deployment of the ParkAPI frontend.
+#
+# This directory is self-contained: it is all that has to be on the server. The image is pulled from the GitHub
+# container registry, where .github/workflows/build.yml publishes it, and everything the deployment is configured with
+# lives in .env next to this file:
+#
+#     cp .env.dist .env        # then fill it in
+#     docker compose pull && docker compose up -d
+#
+# The image holds a static bundle served by nginx. There is no server component, database or volume: nginx writes the
+# VITE_* values of its environment into index.html at request time (see deployment/nginx.conf.template), so one image
+# runs against any ParkAPI instance and for any operator.
+#
+# TLS and routing are left to an external Traefik that finds the container through its docker provider, which is why
+# no port is published here.
+name: ${COMPOSE_PROJECT_NAME:-park-api-frontend}
+
+services:
+  frontend:
+    image: ${IMAGE:?Set IMAGE in .env}:${IMAGE_TAG:?Set IMAGE_TAG in .env -- a git tag, or dev for main}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      TZ: ${TZ:-Europe/Berlin}
+      VITE_PARK_API_URL: ${VITE_PARK_API_URL:?Set VITE_PARK_API_URL in .env}
+      VITE_MAP_STYLE_URL: ${VITE_MAP_STYLE_URL:-https://tiles.binary-butterfly.de/osm-bright-gl-style/style.json}
+      VITE_OPERATOR_NAME: ${VITE_OPERATOR_NAME:?Set VITE_OPERATOR_NAME in .env, it is required for the imprint}
+      VITE_OPERATOR_ADDRESS: ${VITE_OPERATOR_ADDRESS:?Set VITE_OPERATOR_ADDRESS in .env, it is required for the imprint}
+      VITE_OPERATOR_EMAIL: ${VITE_OPERATOR_EMAIL:?Set VITE_OPERATOR_EMAIL in .env, it is required for the imprint}
+      VITE_OPERATOR_PHONE: ${VITE_OPERATOR_PHONE:-}
+      VITE_OPERATOR_REPRESENTATIVE: ${VITE_OPERATOR_REPRESENTATIVE:-}
+      VITE_OPERATOR_REGISTER: ${VITE_OPERATOR_REGISTER:-}
+      VITE_OPERATOR_VAT_ID: ${VITE_OPERATOR_VAT_ID:-}
+    # A list rather than a mapping, as compose interpolates variables in values only, and the router name is a key.
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-park-api-frontend}.rule=Host(`${DOMAIN:?Set DOMAIN in .env}`)
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-park-api-frontend}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-park-api-frontend}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.${COMPOSE_PROJECT_NAME:-park-api-frontend}.loadbalancer.server.port=80
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '5'

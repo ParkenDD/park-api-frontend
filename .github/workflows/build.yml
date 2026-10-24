@@ -1,0 +1,121 @@
+name: Build
+
+# Every push is tested; only a push to main or a tag publishes an image. The image name is the repository on the GitHub
+# container registry in lower case, as registries accept no upper case: ParkenDD/park-api-frontend is published as
+# ghcr.io/parkendd/park-api-frontend.
+#
+#   main          ->  :dev
+#   tag 1.2.0     ->  :1.2.0
+#
+# There is no `latest`: a deployment pins a tag, so that a restart cannot quietly become something else.
+
+on:
+  push:
+    branches: ['**']
+    tags: ['*']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+
+      - uses: docker/setup-buildx-action@v4
+
+      # The tests run against the image that is published below, nginx configuration included, not against a dev
+      # server.
+      - name: Build image for testing
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: deployment/Dockerfile
+          load: true
+          tags: park-api-frontend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Start image
+        run: |
+          docker run -d --name park-api-frontend -p 8080:80 park-api-frontend:test
+          timeout 30 sh -c 'until curl -sf http://localhost:8080/ > /dev/null; do sleep 1; done'
+
+      - run: npx playwright install --with-deps chromium
+
+      - run: npx playwright test
+        env:
+          BASE_URL: http://localhost:8080
+
+      - name: Container log
+        if: failure()
+        run: docker logs park-api-frontend
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  publish:
+    needs: test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      # The bundle is built once on the runner's platform (see deployment/Dockerfile); emulation only has to run the
+      # few steps of the nginx stage for arm64.
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # GitHub keeps the case of owner and repository name (ParkenDD), the registry rejects anything but lower case.
+      - name: Image name
+        id: image
+        run: echo "name=${REGISTRY}/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          flavor: latest=false
+          tags: |
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/main' }}
+            type=ref,event=tag
+
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: deployment/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
