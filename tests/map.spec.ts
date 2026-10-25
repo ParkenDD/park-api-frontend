@@ -20,9 +20,9 @@ test.describe('map', () => {
     await page.goto('/');
     await expect.poll(() => tileRequests.length).toBeGreaterThan(0);
 
-    await page.getByRole('button', { name: 'Fahrrad' }).click();
+    await page.getByRole('combobox', { name: 'Art des Parkplatzes' }).selectOption({ label: 'Fahrrad' });
 
-    await expect(page.getByRole('button', { name: 'Fahrrad' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('combobox', { name: 'Art des Parkplatzes' })).toHaveValue('BIKE');
     await expect.poll(() => tileRequests.some((url) => url.endsWith('?purpose=BIKE'))).toBe(true);
   });
 

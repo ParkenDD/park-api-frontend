@@ -126,6 +126,14 @@ export function AboutEn() {
         As the format, the regulation names DATEX II or a format proven to be fully compatible with it – converters are
         explicitly permitted. This is exactly the role ParkAPI takes on.
       </p>
+      <p>
+        With the 2024 amendment, parking data moved into this regulation from Delegated Regulation (EU) 2022/670
+        (real-time traffic information). Article 8 sets the rules for reuse: the data must be accessible to all users
+        without discrimination, and travel information services must present it neutrally. Data holders may set the
+        terms of use through licence agreements, but these must restrict reuse as little as possible. EU law only
+        allows a reasonable fee, limited to the costs of providing and disseminating the data. In Germany, however,
+        providing data through the National Access Point is free of charge (see below).
+      </p>
 
       <h3>Delegated Regulation (EU) No 885/2013: truck parking</h3>
       <p>
@@ -133,13 +141,61 @@ export function AboutEn() {
         available, dynamic occupancy data has to be provided.
       </p>
 
-      <h3>National implementation and open data</h3>
+      <h3>National implementation: Intelligent Transport Systems Act (IVSG)</h3>
       <p>
-        In Germany, the <a href="https://mobilithek.info">Mobilithek</a> is the National Access Point. The planned
-        Mobility Data Act (Mobilitätsdatengesetz) and the implementation of the amended ITS Directive make the framework
-        more binding still. For public bodies, the principles of the Data Use Act (Datennutzungsgesetz) and – depending
-        on the level of government – the open data rules of the federal government and the federal states apply as
-        well: data collected with public money should be openly available for reuse in machine-readable form.
+        In Germany, the revised Intelligent Transport Systems Act (Intelligente-Verkehrssysteme-Gesetz) of 15 May 2026
+        (BGBl. 2026 I No. 148) implements the amended ITS Directive. It absorbed the rules of the previously planned
+        Mobility Data Act (Mobilitätsdatengesetz). The act obliges data holders to provide their data under the EU
+        regulations named above through the National Access Point, which is the{' '}
+        <a href="https://mobilithek.info">Mobilithek</a> of the Federal Ministry of Transport. Data may also be provided
+        through a data intermediary such as ParkAPI or a federal state system. Use of the data is governed by section 8
+        IVSG:
+      </p>
+      <ul>
+        <li>
+          <strong>Free of charge:</strong> Providing and using data through the National Access Point costs nothing.
+          Germany deliberately goes beyond EU law here, which would allow a cost-based fee.
+        </li>
+        <li>
+          <strong>For any purpose:</strong> The data may be used for commercial and non-commercial purposes. The terms
+          of use must be transparent and non-discriminatory.
+        </li>
+        <li>
+          <strong>Licences:</strong> Data holders may set the terms of use through licences. A statutory ordinance
+          determines which standard licences have to be used.
+        </li>
+        <li>
+          <strong>Registration:</strong> Data holders may require users to register and state their purpose. This
+          requirement then applies equally to all users. Offering data openly without registration remains possible.
+        </li>
+      </ul>
+
+      <h3>Open data for public bodies</h3>
+      <p>
+        Apart from the mobility rules, public bodies are subject to the general open data rules. These do not
+        automatically create an obligation to publish parking data, however:
+      </p>
+      <ul>
+        <li>
+          <strong>Data Use Act (Datennutzungsgesetz, DNG):</strong> It implements the European Open Data Directive (EU)
+          2019/1024 and sets the conditions under which public bodies provide data – in principle free of charge and
+          without discrimination. It does not itself create an obligation to publish.
+        </li>
+        <li>
+          <strong>High-value datasets:</strong> Implementing Regulation (EU) 2023/138 requires certain datasets to be
+          provided free of charge under an open licence. Its mobility category, however, mainly covers transport
+          network data under INSPIRE, not parking occupancy data.
+        </li>
+        <li>
+          <strong>Open data rules of the federal government and the federal states:</strong> Federal authorities are
+          bound by section 12a of the E-Government Act. The federal states have different rules, mostly covering only
+          their own authorities. In Bavaria, for example, Art. 14 of the Bavarian Digital Act binds state authorities
+          but not municipalities. Baden-Württemberg has no general open data obligation so far.
+        </li>
+      </ul>
+      <p>
+        For parking data, the IVSG is therefore usually what counts: it applies to public and private data holders
+        alike and makes providing data through the National Access Point mandatory and free of charge.
       </p>
 
       <Notice>

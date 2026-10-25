@@ -127,6 +127,15 @@ export function AboutDe() {
         Als Format nennt die Verordnung DATEX II oder ein nachweislich vollständig kompatibles Format – Konverter sind
         dabei ausdrücklich zulässig. Genau diese Rolle übernimmt ParkAPI.
       </p>
+      <p>
+        Mit der Änderung von 2024 sind die Parkdaten aus der Delegierten Verordnung (EU) 2022/670 (Echtzeit-
+        Verkehrsinformationen) in diese Verordnung gewandert. Für die Weiterverwendung legt Artikel 8 fest: Die Daten
+        müssen allen Nutzenden diskriminierungsfrei zugänglich sein, und Reiseinformationsdienste müssen sie neutral
+        darstellen. Datenhalter dürfen die Nutzung über Lizenzvereinbarungen regeln, diese müssen die Weiterverwendung
+        aber so wenig wie möglich einschränken. Ein Entgelt erlaubt das EU-Recht nur in angemessener Höhe, begrenzt
+        auf die Kosten für Bereitstellung und Verbreitung. In Deutschland ist die Bereitstellung über den Nationalen
+        Zugangspunkt allerdings unentgeltlich (siehe unten).
+      </p>
 
       <h3>Delegierte Verordnung (EU) Nr. 885/2013: Lkw-Parkplätze</h3>
       <p>
@@ -134,13 +143,62 @@ export function AboutDe() {
         soweit vorhanden, dynamische Belegungsdaten bereitzustellen.
       </p>
 
-      <h3>Nationale Umsetzung und Open Data</h3>
+      <h3>Nationale Umsetzung: Intelligente-Verkehrssysteme-Gesetz (IVSG)</h3>
       <p>
-        In Deutschland ist die <a href="https://mobilithek.info">Mobilithek</a> der Nationale Zugangspunkt. Mit dem
-        geplanten Mobilitätsdatengesetz und der Umsetzung der geänderten IVS-Richtlinie wird der Rahmen weiter
-        verbindlicher. Für öffentliche Stellen kommen die Grundsätze des Datennutzungsgesetzes und – je nach Ebene –
-        die Open-Data-Regelungen von Bund und Ländern hinzu: Daten, die mit öffentlichen Mitteln erhoben werden, sollen
-        offen und maschinenlesbar zur Weiterverwendung bereitstehen.
+        In Deutschland setzt das neu gefasste Intelligente-Verkehrssysteme-Gesetz vom 15. Mai 2026 (BGBl. 2026 I
+        Nr. 148) die geänderte IVS-Richtlinie um. Die Regelungen des früher geplanten Mobilitätsdatengesetzes sind darin
+        aufgegangen. Das Gesetz verpflichtet die Datenhalter, ihre Daten nach den genannten EU-Verordnungen über den
+        Nationalen Zugangspunkt bereitzustellen; das ist die <a href="https://mobilithek.info">Mobilithek</a> des
+        Bundesministeriums für Verkehr. Die Bereitstellung darf auch über einen Datenmittler wie ParkAPI oder ein
+        Landessystem erfolgen. Für die Nutzung gilt (§ 8 IVSG):
+      </p>
+      <ul>
+        <li>
+          <strong>Unentgeltlich:</strong> Bereitstellung und Nutzung der Daten über den Nationalen Zugangspunkt sind
+          kostenlos. Damit geht Deutschland bewusst über das EU-Recht hinaus, das ein kostenbasiertes Entgelt zulassen
+          würde.
+        </li>
+        <li>
+          <strong>Für jeden Zweck:</strong> Die Daten dürfen kommerziell und nichtkommerziell genutzt werden. Die
+          Nutzungsbedingungen müssen transparent und nichtdiskriminierend sein.
+        </li>
+        <li>
+          <strong>Lizenzen:</strong> Datenhalter können die Nutzungsbedingungen über Lizenzen regeln. Welche
+          Standardlizenzen dabei zu verwenden sind, legt eine Rechtsverordnung fest.
+        </li>
+        <li>
+          <strong>Registrierung:</strong> Datenhalter können verlangen, dass sich Nutzende registrieren und den
+          Nutzungszweck angeben. Diese Vorgabe gilt dann für alle Nutzenden gleichermaßen. Ein offenes Angebot ohne
+          Registrierung bleibt möglich.
+        </li>
+      </ul>
+
+      <h3>Open Data für öffentliche Stellen</h3>
+      <p>
+        Unabhängig von den Mobilitätsvorgaben gelten für öffentliche Stellen die allgemeinen Open-Data-Regeln. Sie
+        begründen allerdings nicht automatisch eine Pflicht, Parkdaten zu veröffentlichen:
+      </p>
+      <ul>
+        <li>
+          <strong>Datennutzungsgesetz (DNG):</strong> Es setzt die europäische Open-Data-Richtlinie (EU) 2019/1024 um und
+          regelt die Bedingungen, wenn öffentliche Stellen Daten bereitstellen – grundsätzlich unentgeltlich und
+          diskriminierungsfrei. Eine Pflicht zur Veröffentlichung begründet es selbst nicht.
+        </li>
+        <li>
+          <strong>Hochwertige Datensätze:</strong> Die Durchführungsverordnung (EU) 2023/138 schreibt für bestimmte
+          Datensätze eine kostenlose Bereitstellung unter offener Lizenz vor. Die Kategorie Mobilität umfasst dort aber
+          vor allem Verkehrsnetzdaten nach INSPIRE, keine Belegungsdaten von Parkplätzen.
+        </li>
+        <li>
+          <strong>Open-Data-Regeln von Bund und Ländern:</strong> Für Bundesbehörden gilt § 12a E-Government-Gesetz. Die
+          Länder regeln das unterschiedlich und meist nur für ihre eigenen Behörden. In Bayern etwa verpflichtet Art. 14
+          des Bayerischen Digitalgesetzes die staatlichen Behörden, nicht aber die Kommunen. Baden-Württemberg hat bislang
+          keine allgemeine Open-Data-Pflicht.
+        </li>
+      </ul>
+      <p>
+        Für Parkdaten ist deshalb meist das IVSG maßgeblich: Es gilt für öffentliche und private Datenhalter
+        gleichermaßen und macht die Bereitstellung über den Nationalen Zugangspunkt verpflichtend und unentgeltlich.
       </p>
 
       <Notice>

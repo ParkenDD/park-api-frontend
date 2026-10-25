@@ -25,47 +25,43 @@ const Controls = styled.div`
   bottom: 2.5rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  /* The boxes share the width of the widest one. */
+  align-items: stretch;
   gap: 0.5rem;
   z-index: 4;
 `;
 
-const Filter = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  padding: 0.3rem;
-  background: ${({ theme }) => theme.colors.overlay};
-  border-radius: ${({ theme }) => theme.radius};
-  box-shadow: ${({ theme }) => theme.shadow};
-`;
-
-const FilterButton = styled.button<{ $active: boolean }>`
-  padding: 0.3rem 0.7rem;
+const Filter = styled.select`
+  padding: 0.4rem 2rem 0.4rem 0.7rem;
   border: none;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.radius};
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  color: ${({ theme, $active }) => ($active ? '#fff' : theme.colors.text)};
-  background: ${({ theme, $active }) => ($active ? theme.colors.primary : 'transparent')};
+  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.overlay}
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231d2733'/%3E%3C/svg%3E")
+    no-repeat right 0.7rem center;
+  box-shadow: ${({ theme }) => theme.shadow};
+  appearance: none;
 
-  &:hover {
-    background: ${({ theme, $active }) => ($active ? theme.colors.primaryDark : theme.colors.surface)};
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
   }
 `;
 
 // The imprint and privacy policy have to be reachable from every page, the map has no footer to carry them.
 const LegalLinks = styled.nav`
   display: flex;
+  justify-content: center;
   gap: 0.75rem;
-  padding: 0.25rem 0.6rem;
+  padding: 0.4rem 0.8rem;
   background: ${({ theme }) => theme.colors.overlay};
   border-radius: ${({ theme }) => theme.radius};
   box-shadow: ${({ theme }) => theme.shadow};
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 
   a {
     color: ${({ theme }) => theme.colors.muted};
@@ -115,20 +111,16 @@ export function MapPage() {
       )}
       {selectedId !== null && <ParkingSitePanel parkingSiteId={selectedId} onClose={() => setSelectedId(null)} />}
       <Controls>
-        <Filter role="group" aria-label={t.map.filter}>
-          <FilterButton type="button" $active={purpose === null} aria-pressed={purpose === null} onClick={() => setPurpose(null)}>
-            {t.map.all}
-          </FilterButton>
+        <Filter
+          aria-label={t.map.filter}
+          value={purpose ?? ''}
+          onChange={(event) => setPurpose((event.target.value || null) as PurposeType | null)}
+        >
+          <option value="">{t.map.all}</option>
           {purposes.map((item) => (
-            <FilterButton
-              key={item}
-              type="button"
-              $active={purpose === item}
-              aria-pressed={purpose === item}
-              onClick={() => setPurpose(item)}
-            >
+            <option key={item} value={item}>
               {t.purposes[item]}
-            </FilterButton>
+            </option>
           ))}
         </Filter>
         <Legend />

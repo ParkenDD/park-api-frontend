@@ -17,12 +17,23 @@ import { routes } from '../../i18n/routes';
 import { tilesUrl, type PurposeType } from '../../lib/api';
 import { config } from '../../lib/config';
 import {
+  CIRCLE_STROKE_WIDTH,
+  LABEL_BACKGROUND_IMAGE,
+  LABEL_FONT,
+  LABEL_PADDING,
+  LABEL_TEXT_SIZE,
+  LABELS_MIN_ZOOM,
+  PARKING_SITES_LABEL_LAYER,
   PARKING_SITES_LAYER,
   PARKING_SITES_MIN_ZOOM,
   PARKING_SITES_SOURCE,
   PARKING_SITES_SOURCE_LAYER,
   circleColor,
   circleRadius,
+  createLabelBackground,
+  createPurposeIcons,
+  labelOffset,
+  labelText,
 } from './mapStyle';
 
 // MapLibre looks for its worker next to its own module, which no longer exists once Vite has bundled it, so the
@@ -107,9 +118,38 @@ export function ParkingMap({ purpose, selectedId, onSelect, onZoomChange }: Park
           'circle-color': circleColor,
           'circle-radius': circleRadius,
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': ['case', ['==', ['get', 'id'], selectedIdRef.current ?? -1], 3, 1.5],
+          'circle-stroke-width': ['case', ['==', ['get', 'id'], selectedIdRef.current ?? -1], 3, CIRCLE_STROKE_WIDTH],
         },
       });
+      // Text needs the glyphs of the base map style, a style without them would fail to render the layer.
+      if (map.getStyle().glyphs) {
+        const labelBackground = createLabelBackground();
+        map.addImage(LABEL_BACKGROUND_IMAGE, labelBackground.image, labelBackground.options);
+        for (const icon of createPurposeIcons()) {
+          map.addImage(icon.name, icon.image, icon.options);
+        }
+        map.addLayer({
+          id: PARKING_SITES_LABEL_LAYER,
+          type: 'symbol',
+          source: PARKING_SITES_SOURCE,
+          'source-layer': PARKING_SITES_SOURCE_LAYER,
+          minzoom: LABELS_MIN_ZOOM,
+          filter: ['any', ['has', 'capacity'], ['has', 'free_capacity']],
+          layout: {
+            'text-field': labelText,
+            'text-font': LABEL_FONT,
+            'text-size': LABEL_TEXT_SIZE,
+            'text-anchor': 'left',
+            'text-offset': labelOffset,
+            'icon-image': LABEL_BACKGROUND_IMAGE,
+            'icon-text-fit': 'both',
+            'icon-text-fit-padding': LABEL_PADDING,
+          },
+          paint: {
+            'text-color': circleColor,
+          },
+        });
+      }
     });
 
     map.on('click', PARKING_SITES_LAYER, (event) => {
@@ -168,7 +208,7 @@ export function ParkingMap({ purpose, selectedId, onSelect, onZoomChange }: Park
         'case',
         ['==', ['get', 'id'], selectedId ?? -1],
         3,
-        1.5,
+        CIRCLE_STROKE_WIDTH,
       ]);
     }
   }, [selectedId]);

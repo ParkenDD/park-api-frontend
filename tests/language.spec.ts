@@ -16,7 +16,7 @@ test.describe('language', () => {
     test('shows English on the map and in the details', async ({ page }) => {
       await page.goto(`/?site=${parkingSite.id}`);
 
-      await expect(page.getByRole('button', { name: 'Bicycle' })).toBeVisible();
+      await expect(page.getByRole('combobox', { name: 'Kind of parking' })).toBeVisible();
       const panel = page.getByTestId('parking-site-panel');
       await expect(panel.getByTestId('occupancy')).toContainText('of 459 spaces available');
       await expect(panel).toContainText('Multi-storey car park');
@@ -64,11 +64,11 @@ test.describe('language', () => {
 
   test('switches the language on the map without losing the map', async ({ page }) => {
     await page.goto('/#map=13/48.7758/9.1829');
-    await expect(page.getByRole('button', { name: 'Fahrrad' })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Art des Parkplatzes' })).toBeVisible();
 
     await page.getByRole('button', { name: 'English' }).click();
 
-    await expect(page.getByRole('button', { name: 'Bicycle' })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Kind of parking' })).toBeVisible();
     await expect(page.getByTestId('map').locator('.maplibregl-ctrl-attrib')).toContainText('Parking data');
     expect(new URL(page.url()).hash).toBe('#map=13/48.7758/9.1829');
   });
