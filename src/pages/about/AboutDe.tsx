@@ -223,14 +223,20 @@ export function AboutDe() {
         GitHub-Organisation <a href="https://github.com/ParkenDD">ParkenDD</a>, und die Schnittstellen <code>/v1</code>{' '}
         und <code>/v2</code> halten Anwendungen der früheren Versionen am Laufen.
       </p>
+      <p>
+        Die Neuentwicklung ist maßgeblich im Zuge des Neuaufbaus der Mobilitätsdatenplattform MobiData BW der{' '}
+        <a href="https://www.nvbw.de">NVBW – Nahverkehrsgesellschaft Baden-Württemberg</a> entstanden. Die NVBW
+        betreibt eine eigene Instanz unter{' '}
+        <a href="https://api.mobidata-bw.de/park-api">api.mobidata-bw.de/park-api</a>.
+      </p>
 
       <h2>Offen und unabhängig</h2>
       <p>
         ParkAPI ist Open-Source-Software unter MIT-Lizenz. Der Quellcode der{' '}
         <a href="https://github.com/ParkenDD/park-api-v3">Plattform</a> und der{' '}
         <a href="https://github.com/ParkenDD/parkapi-sources-v3">Datenkonverter</a> ist öffentlich einsehbar; neue
-        Datenquellen lassen sich ohne Abhängigkeit von einem einzelnen Anbieter anbinden. Die Plattform wird produktiv
-        unter anderem von MobiData BW, der Mobilitätsdatenplattform des Landes Baden-Württemberg, betrieben.
+        Datenquellen lassen sich ohne Abhängigkeit von einem einzelnen Anbieter anbinden, und jede Organisation kann
+        eine eigene Instanz betreiben.
       </p>
 
       <h2>Mitmachen</h2>

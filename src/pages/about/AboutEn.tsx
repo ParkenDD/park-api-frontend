@@ -220,14 +220,18 @@ export function AboutEn() {
         <a href="https://github.com/ParkenDD">ParkenDD</a> GitHub organisation, and the <code>/v1</code> and{' '}
         <code>/v2</code> interfaces keep applications of the earlier versions running.
       </p>
+      <p>
+        The new development came about largely as part of the rebuild of MobiData BW, the mobility data platform of
+        the <a href="https://www.nvbw.de">NVBW – Nahverkehrsgesellschaft Baden-Württemberg</a>. The NVBW runs its own
+        instance at <a href="https://api.mobidata-bw.de/park-api">api.mobidata-bw.de/park-api</a>.
+      </p>
 
       <h2>Open and independent</h2>
       <p>
         ParkAPI is open source software under the MIT licence. The source code of the{' '}
         <a href="https://github.com/ParkenDD/park-api-v3">platform</a> and of the{' '}
         <a href="https://github.com/ParkenDD/parkapi-sources-v3">data converters</a> is public; new data sources can be
-        connected without depending on a single vendor. Among others, the platform is run in production by MobiData BW,
-        the mobility data platform of the state of Baden-Württemberg.
+        connected without depending on a single vendor, and any organisation can run an instance of its own.
       </p>
 
       <h2>Get involved</h2>
