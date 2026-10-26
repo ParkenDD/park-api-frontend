@@ -25,6 +25,8 @@ services:
       TZ: ${TZ:-Europe/Berlin}
       VITE_PARK_API_URL: ${VITE_PARK_API_URL:?Set VITE_PARK_API_URL in .env}
       VITE_MAP_STYLE_URL: ${VITE_MAP_STYLE_URL:-https://tiles.binary-butterfly.de/osm-bright-gl-style/style.json}
+      # Without the colon, so that an empty value turns the place search off rather than falling back to the default.
+      VITE_GEOCODER_URL: ${VITE_GEOCODER_URL-https://geocode.park-api.de}
       VITE_OPERATOR_NAME: ${VITE_OPERATOR_NAME:?Set VITE_OPERATOR_NAME in .env, it is required for the imprint}
       VITE_OPERATOR_ADDRESS: ${VITE_OPERATOR_ADDRESS:?Set VITE_OPERATOR_ADDRESS in .env, it is required for the imprint}
       VITE_OPERATOR_EMAIL: ${VITE_OPERATOR_EMAIL:?Set VITE_OPERATOR_EMAIL in .env, it is required for the imprint}

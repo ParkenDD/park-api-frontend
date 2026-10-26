@@ -25,7 +25,8 @@ export default defineConfig({
   webServer: process.env.BASE_URL
     ? undefined
     : {
-        command: `npm run build && npm run preview -- --port ${port} --strictPort`,
+        // The e2e mode ignores .env files (see vite.config.ts).
+        command: `npm run build -- --mode e2e && npm run preview -- --port ${port} --strictPort`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,

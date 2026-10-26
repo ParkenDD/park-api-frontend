@@ -5,6 +5,8 @@ const stripTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 export const config = {
   parkApiUrl: stripTrailingSlash(env('VITE_PARK_API_URL', 'https://api.mobidata-bw.de/park-api')),
   mapStyleUrl: env('VITE_MAP_STYLE_URL', 'https://tiles.binary-butterfly.de/osm-bright-gl-style/style.json'),
+  // A Photon geocoder for the place search of the map. Set to an empty value, the map has no search.
+  geocoderUrl: stripTrailingSlash(env('VITE_GEOCODER_URL', 'https://geocode.park-api.de')),
   operator: {
     name: env('VITE_OPERATOR_NAME', 'binary butterfly GmbH'),
     address: env('VITE_OPERATOR_ADDRESS', 'Am Hertinger Tor 1, 59423 Unna'),
@@ -31,3 +33,4 @@ function hostOf(url: string): string {
 // The hosts the browser loads map and parking data from, as the privacy policy names them.
 export const parkApiHost = hostOf(config.parkApiUrl);
 export const mapStyleHost = hostOf(config.mapStyleUrl);
+export const geocoderHost = config.geocoderUrl ? hostOf(config.geocoderUrl) : null;

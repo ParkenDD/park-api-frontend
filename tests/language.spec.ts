@@ -70,6 +70,7 @@ test.describe('language', () => {
 
     await expect(page.getByRole('combobox', { name: 'Kind of parking' })).toBeVisible();
     await expect(page.getByTestId('map').locator('.maplibregl-ctrl-attrib')).toContainText('Parking data');
+    await expect(page.getByTestId('map').locator('.maplibregl-ctrl-attrib')).toContainText('OpenStreetMap contributors');
     expect(new URL(page.url()).hash).toBe('#map=13/48.7758/9.1829');
   });
 });

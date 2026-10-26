@@ -4,12 +4,14 @@ import styled from 'styled-components';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { fetchParkingSite, fetchSource, type ParkingSite, type Source } from '../../lib/api';
 import { publicApiUrl } from '../../lib/config';
+import { PLACE_SEARCH_SPACE } from './PlaceSearch';
 
 const Panel = styled.aside`
   position: absolute;
-  top: calc(${({ theme }) => theme.headerHeight} + 0.75rem);
+  /* Below the place search, whose suggestions then open on top of the panel. */
+  top: calc(${({ theme }) => theme.headerHeight} + 0.75rem + ${PLACE_SEARCH_SPACE});
   left: 0.75rem;
-  max-height: calc(100% - ${({ theme }) => theme.headerHeight} - 3.25rem);
+  max-height: calc(100% - ${({ theme }) => theme.headerHeight} - 3.25rem - ${PLACE_SEARCH_SPACE});
   width: 360px;
   max-width: calc(100% - 1.5rem);
   overflow-y: auto;

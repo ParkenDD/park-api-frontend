@@ -7,6 +7,7 @@ import { Legend } from '../components/map/Legend';
 import { PARKING_SITES_MIN_ZOOM } from '../components/map/mapStyle';
 import { ParkingMap } from '../components/map/ParkingMap';
 import { ParkingSitePanel } from '../components/map/ParkingSitePanel';
+import { PLACE_SEARCH_SPACE } from '../components/map/PlaceSearch';
 import { useLanguage } from '../i18n/LanguageContext';
 import { routes } from '../i18n/routes';
 import type { PurposeType } from '../lib/api';
@@ -19,10 +20,11 @@ const Page = styled.div`
   overflow: hidden;
 `;
 
-const Controls = styled.div`
+// Placed just above the attribution in the bottom right corner of the map, whose height changes.
+const Controls = styled.div<{ $bottom: number }>`
   position: absolute;
   right: 0.75rem;
-  bottom: 2.5rem;
+  bottom: calc(${({ $bottom }) => $bottom}px + 0.4rem);
   display: flex;
   flex-direction: column;
   /* The boxes share the width of the widest one. */
@@ -52,6 +54,31 @@ const Filter = styled.select`
   }
 `;
 
+const Toggle = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: ${({ theme }) => theme.radius};
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.overlay};
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  input {
+    margin: 0;
+    accent-color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
 // The imprint and privacy policy have to be reachable from every page, the map has no footer to carry them.
 const LegalLinks = styled.nav`
   display: flex;
@@ -70,7 +97,7 @@ const LegalLinks = styled.nav`
 
 const ZoomHint = styled.div`
   position: absolute;
-  top: calc(${({ theme }) => theme.headerHeight} + 1rem);
+  top: calc(${({ theme }) => theme.headerHeight} + 1rem + ${PLACE_SEARCH_SPACE});
   left: 50%;
   transform: translateX(-50%);
   padding: 0.5rem 1rem;
@@ -88,7 +115,10 @@ export function MapPage() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [purpose, setPurpose] = useState<PurposeType | null>(null);
+  const [showOnStreetDetails, setShowOnStreetDetails] = useState(false);
   const [zoom, setZoom] = useState<number | null>(null);
+  // Until measured, the height of the collapsed attribution including its margin.
+  const [bottomRightHeight, setBottomRightHeight] = useState(34);
 
   const siteParam = Number(searchParams.get('site'));
   const selectedId = Number.isInteger(siteParam) && siteParam > 0 ? siteParam : null;
@@ -105,12 +135,19 @@ export function MapPage() {
   return (
     <Page>
       <Header overlay />
-      <ParkingMap purpose={purpose} selectedId={selectedId} onSelect={setSelectedId} onZoomChange={setZoom} />
+      <ParkingMap
+        purpose={purpose}
+        showOnStreetDetails={showOnStreetDetails}
+        selectedId={selectedId}
+        onSelect={setSelectedId}
+        onZoomChange={setZoom}
+        onBottomRightHeightChange={setBottomRightHeight}
+      />
       {zoom !== null && zoom < PARKING_SITES_MIN_ZOOM && (
         <ZoomHint data-testid="zoom-hint">{t.map.zoomHint}</ZoomHint>
       )}
       {selectedId !== null && <ParkingSitePanel parkingSiteId={selectedId} onClose={() => setSelectedId(null)} />}
-      <Controls>
+      <Controls $bottom={bottomRightHeight}>
         <Filter
           aria-label={t.map.filter}
           value={purpose ?? ''}
@@ -123,6 +160,14 @@ export function MapPage() {
             </option>
           ))}
         </Filter>
+        <Toggle>
+          <input
+            type="checkbox"
+            checked={showOnStreetDetails}
+            onChange={(event) => setShowOnStreetDetails(event.target.checked)}
+          />
+          {t.map.onStreetDetails}
+        </Toggle>
         <Legend />
         <LegalLinks aria-label={t.map.legal}>
           <Link to={routes.imprint}>{t.pageTitles.imprint}</Link>

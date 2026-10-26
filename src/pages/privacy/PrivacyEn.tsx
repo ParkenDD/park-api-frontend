@@ -1,5 +1,5 @@
 import { Notice } from '../../components/ContentLayout';
-import { config, mapStyleHost, parkApiHost } from '../../lib/config';
+import { config, geocoderHost, mapStyleHost, parkApiHost } from '../../lib/config';
 
 export function PrivacyEn() {
   const { operator } = config;
@@ -50,6 +50,12 @@ export function PrivacyEn() {
         <li>
           <strong>Parking data (ParkAPI interface and vector tiles):</strong> <code>{parkApiHost}</code>
         </li>
+        {geocoderHost && (
+          <li>
+            <strong>Address and place search (only when typing into the search field, with the text entered and the
+            centre of the map section):</strong> <code>{geocoderHost}</code>
+          </li>
+        )}
       </ul>
       <p>
         In doing so, your IP address and technical information about your browser are transmitted to the respective

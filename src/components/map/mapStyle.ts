@@ -14,6 +14,20 @@ export const LABEL_BACKGROUND_IMAGE = 'parking-site-label-background';
 // The layer name inside the vector tiles, as written by park-api's TilesHandler.
 export const PARKING_SITES_SOURCE_LAYER = 'parking_sites';
 
+// ParkAPI adds the shapes of parking sites (polygons and lines) to tiles from this zoom level on
+// (RENDER_PARKING_SITE_GEOMETRIES_MIN_ZOOM in park-api), in a layer of their own. A parking site with a shape is still
+// part of the point layer as well, flagged by `has_geometry`: it gets its label from there, but no circle.
+export const PARKING_SITE_GEOMETRIES_MIN_ZOOM = 12;
+export const PARKING_SITE_GEOMETRIES_SOURCE_LAYER = 'parking_site_geometries';
+export const PARKING_SITE_AREAS_LAYER = 'parking-site-areas';
+export const PARKING_SITE_OUTLINES_LAYER = 'parking-site-outlines';
+export const PARKING_SITE_AREA_OPACITY = 0.25;
+export const isAreaGeometry: ExpressionSpecification = ['in', ['geometry-type'], ['literal', ['Polygon', 'MultiPolygon']]];
+
+// Set on a point only while the shape of its parking site is part of the same tile.
+const hasGeometry: ExpressionSpecification = ['has', 'has_geometry'];
+export const isPointWithoutGeometry: ExpressionSpecification = ['!', hasGeometry];
+
 // A share of free spaces below this counts as "almost full".
 const SCARCE_RATIO = 0.1;
 
@@ -49,11 +63,41 @@ const CIRCLE_RADIUS_STOPS: [number, number][] = [
   [16, 8.5],
 ];
 export const CIRCLE_STROKE_WIDTH = 1.5;
+const SELECTED_CIRCLE_STROKE_WIDTH = 3;
+// Outlines of areas as well as lines, in pixels.
+const OUTLINE_WIDTH = 2;
+const SELECTED_OUTLINE_WIDTH = 4;
+
+const isSelected = (selectedId: number | null): ExpressionSpecification => ['==', ['get', 'id'], selectedId ?? -1];
+
+export const circleStrokeWidth = (selectedId: number | null): ExpressionSpecification => [
+  'case',
+  isSelected(selectedId),
+  SELECTED_CIRCLE_STROKE_WIDTH,
+  CIRCLE_STROKE_WIDTH,
+];
+
+export const outlineWidth = (selectedId: number | null): ExpressionSpecification => [
+  'case',
+  isSelected(selectedId),
+  SELECTED_OUTLINE_WIDTH,
+  OUTLINE_WIDTH,
+];
 
 export const circleRadius: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], ...CIRCLE_RADIUS_STOPS.flat()];
 
 // Below this zoom level, the labels would mostly hide each other.
 export const LABELS_MIN_ZOOM = 11;
+
+// Parking along streets is plentiful and mostly small, so by default it is left out of the tiles up to this zoom level
+// and gets no labels. Showing the on-street details brings back both.
+export const ON_STREET_HIDDEN_UNTIL_ZOOM = 12;
+
+export const labelFilter = (showOnStreetDetails: boolean): ExpressionSpecification => [
+  'all',
+  ['any', ['has', 'capacity'], ['has', 'free_capacity']],
+  showOnStreetDetails ? true : ['!=', ['get', 'type'], 'ON_STREET'],
+];
 
 // Has to be one of the fonts the glyphs of the base map style provide.
 export const LABEL_FONT = ['Open Sans Bold'];
@@ -65,9 +109,13 @@ export const LABEL_PADDING: [number, number, number, number] = [2, 4.5, 4.5, 4.5
 // Negative: the box covers the white ring of its circle and overlaps the colour by a pixel, so the two are connected.
 const LABEL_GAP = -CIRCLE_STROKE_WIDTH - 1;
 
+/** Right of the circle, or centred on the point of a parking site drawn as its shape, which has no circle. */
+export const labelAnchor: ExpressionSpecification = ['case', hasGeometry, 'center', 'left'];
+
 /**
  * Places the label right of its circle, with its box starting just beyond the circle's edge. The offset is given in
- * ems of the text and follows the circle radius, which grows with the zoom level.
+ * ems of the text and follows the circle radius, which grows with the zoom level. Labels of parking sites drawn as
+ * their shape need no offset.
  */
 export const labelOffset: ExpressionSpecification = [
   'interpolate',
@@ -75,7 +123,12 @@ export const labelOffset: ExpressionSpecification = [
   ['zoom'],
   ...CIRCLE_RADIUS_STOPS.flatMap(([zoom, radius]) => [
     zoom,
-    ['literal', [(radius + CIRCLE_STROKE_WIDTH + LABEL_GAP + LABEL_PADDING[3]) / LABEL_TEXT_SIZE, 0]],
+    [
+      'case',
+      hasGeometry,
+      ['literal', [0, 0]],
+      ['literal', [(radius + CIRCLE_STROKE_WIDTH + LABEL_GAP + LABEL_PADDING[3]) / LABEL_TEXT_SIZE, 0]],
+    ],
   ]),
 ] as ExpressionSpecification;
 

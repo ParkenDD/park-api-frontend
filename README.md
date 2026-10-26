@@ -3,7 +3,8 @@
 A static web frontend for [ParkAPI v3](https://github.com/ParkenDD/park-api-v3):
 
 - `/` – fullscreen map of all parking sites with their current occupancy, based on the vector tiles of ParkAPI
-  (`/api/public/v3/tiles/{z}/{x}/{y}.mvt`) on top of the binary butterfly base map
+  (`/api/public/v3/tiles/{z}/{x}/{y}.mvt`) on top of the binary butterfly base map; from zoom level 12 on, parking
+  sites with a known shape are drawn as areas or lines as well
 - `/about` – the project, written for authorities and parking operators: benefits and legal obligations to publish
   parking data
 - `/open-data` – introduction to the data, the API and the OpenAPI documentation, the data model, and a live list of
@@ -15,6 +16,22 @@ English otherwise) until the visitor picks one with the switcher in the header; 
 
 Built with React, styled-components, MapLibre GL and Vite. There is no server component: the build is a static bundle
 which talks to ParkAPI directly from the browser.
+
+## Origin: ParkenDD
+
+The project goes back to [ParkenDD](https://parkendd.de), an app showing the free spaces of public car parks in
+Dresden ("DD"), which began in January 2015 as an [iOS app](https://github.com/kiliankoe/ParkenDD) and was followed by
+apps for Android and Windows. In June 2015 the community of [Offenes Dresden](https://github.com/offenesdresden) built
+[ParkAPI](https://github.com/offenesdresden/ParkAPI) as its backend: a service which scrapes the occupancy that cities
+publish on their websites and serves it as one JSON API, soon for more cities than Dresden, such as Ingolstadt,
+Hamburg, Zürich and Basel.
+
+The project moved to its own GitHub organisation, [ParkenDD](https://github.com/ParkenDD), "wherever there is open
+parking data". [ParkAPI2](https://github.com/ParkenDD/ParkAPI2) (2021) rewrote the service with Django and organised
+the data by source instead of by city. [ParkAPI v3](https://github.com/ParkenDD/park-api-v3) (2023), developed for
+MobiData BW, carries on with this approach, with its data converters as a separate module
+([parkapi-sources-v3](https://github.com/ParkenDD/parkapi-sources-v3)). This frontend belongs to the third generation
+and is published in the same organisation.
 
 ## Development
 
@@ -50,6 +67,7 @@ All configuration is read at runtime, so one image serves every environment. In 
 |---|---|
 | `VITE_PARK_API_URL` | Base URL of ParkAPI, without trailing slash |
 | `VITE_MAP_STYLE_URL` | MapLibre style of the base map |
+| `VITE_GEOCODER_URL` | [Photon](https://github.com/komoot/photon) geocoder for the address search of the map, default `https://geocode.park-api.de`; empty turns the search off. It has to allow the site's origin via CORS (geocode.park-api.de allows `https://park-api.de` only), which is why `npm run dev` reaches it through the dev server proxy at `/geocode` |
 | `VITE_OPERATOR_NAME`, `_ADDRESS`, `_EMAIL`, `_PHONE`, `_REPRESENTATIVE`, `_REGISTER`, `_VAT_ID` | Operator of the website for the imprint and privacy policy |
 
 ## Container image and deployment

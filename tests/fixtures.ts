@@ -3,6 +3,39 @@ import { test as base, expect } from '@playwright/test';
 // The defaults of src/lib/config.ts, which the build under test uses as no VITE_* variables are set.
 const PARK_API_URL = 'https://api.mobidata-bw.de/park-api/api/public';
 const MAP_STYLE_URL = 'https://tiles.binary-butterfly.de/osm-bright-gl-style/style.json';
+const GEOCODER_URL = 'https://geocode.park-api.de';
+
+const photonFeature = (properties: Record<string, unknown>, coordinates: [number, number]) => ({
+  type: 'Feature',
+  properties,
+  geometry: { type: 'Point', coordinates },
+});
+
+// What the geocoder finds for any query, in Germany and elsewhere.
+export const places = {
+  germany: [
+    photonFeature(
+      {
+        osm_type: 'W',
+        osm_id: 1,
+        name: 'Königstraße',
+        postcode: '70173',
+        city: 'Stuttgart',
+        state: 'Baden-Württemberg',
+        countrycode: 'DE',
+        extent: [9.1735, 48.7743, 9.1742, 48.774],
+      },
+      [9.1738, 48.7742],
+    ),
+    photonFeature(
+      { osm_type: 'N', osm_id: 2, street: 'Flandernstraße', housenumber: '101', postcode: '73732', city: 'Esslingen', countrycode: 'DE' },
+      [9.3212, 48.7448],
+    ),
+  ],
+  elsewhere: [
+    photonFeature({ osm_type: 'R', osm_id: 3, name: 'Königsdorf', city: 'Wien', country: 'Österreich', countrycode: 'AT' }, [16.37, 48.21]),
+  ],
+};
 
 export const sources = [
   {
@@ -54,6 +87,7 @@ const emptyStyle = {
 
 interface Fixtures {
   tileRequests: string[];
+  geocoderRequests: URL[];
 }
 
 export const test = base.extend<Fixtures>({
@@ -90,6 +124,24 @@ export const test = base.extend<Fixtures>({
       });
 
       await use(tileRequests);
+    },
+    { auto: true },
+  ],
+  geocoderRequests: [
+    async ({ context, tileRequests: _ }, use) => {
+      const geocoderRequests: URL[] = [];
+      // Searched with and without the restriction to Germany; the unrestricted search finds German places as well.
+      await context.route(`${GEOCODER_URL}/api?*`, (route) => {
+        const url = new URL(route.request().url());
+        geocoderRequests.push(url);
+        const features =
+          url.searchParams.get('countrycode') === 'DE' ? places.germany : [...places.elsewhere, ...places.germany];
+        return route.fulfill({
+          json: { type: 'FeatureCollection', features },
+          headers: { 'Access-Control-Allow-Origin': '*' },
+        });
+      });
+      await use(geocoderRequests);
     },
     { auto: true },
   ],

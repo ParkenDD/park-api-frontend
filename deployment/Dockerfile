@@ -26,6 +26,7 @@ ENV NGINX_ENVSUBST_FILTER=^VITE_
 # has to be set, and this way the image runs without any configuration.
 ENV VITE_PARK_API_URL=https://api.mobidata-bw.de/park-api \
     VITE_MAP_STYLE_URL=https://tiles.binary-butterfly.de/osm-bright-gl-style/style.json \
+    VITE_GEOCODER_URL=https://geocode.park-api.de \
     VITE_OPERATOR_NAME="binary butterfly GmbH" \
     VITE_OPERATOR_ADDRESS="Am Hertinger Tor 1, 59423 Unna" \
     VITE_OPERATOR_EMAIL=ernesto.ruge@binary-butterfly.de \

@@ -82,7 +82,20 @@ export function fetchParkingSite(parkingSiteId: number, signal?: AbortSignal): P
   return getJson<ParkingSite>(`/v3/parking-sites/${parkingSiteId}`, signal);
 }
 
-export function tilesUrl(purpose: PurposeType | null): string {
-  const query = purpose ? `?purpose=${purpose}` : '';
+export interface TileFilter {
+  purpose: PurposeType | null;
+  /** Leave out parking sites of type ON_STREET in tiles up to and including this zoom level. */
+  hideOnStreetUntilZoom: number | null;
+}
+
+export function tilesUrl({ purpose, hideOnStreetUntilZoom }: TileFilter): string {
+  const params = new URLSearchParams();
+  if (purpose) {
+    params.set('purpose', purpose);
+  }
+  if (hideOnStreetUntilZoom !== null) {
+    params.set('hide_on_street_until_zoom', String(hideOnStreetUntilZoom));
+  }
+  const query = params.size ? `?${params}` : '';
   return `${publicApiUrl}/v3/tiles/{z}/{x}/{y}.mvt${query}`;
 }

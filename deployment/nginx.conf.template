@@ -12,6 +12,7 @@ server {
     # index.html on every request, where src/lib/runtimeEnv.ts reads them.
     sub_filter 'data-vite-park-api-url="VITE_PARK_API_URL"'                       'data-vite-park-api-url="${VITE_PARK_API_URL}"';
     sub_filter 'data-vite-map-style-url="VITE_MAP_STYLE_URL"'                     'data-vite-map-style-url="${VITE_MAP_STYLE_URL}"';
+    sub_filter 'data-vite-geocoder-url="VITE_GEOCODER_URL"'                       'data-vite-geocoder-url="${VITE_GEOCODER_URL}"';
     sub_filter 'data-vite-operator-name="VITE_OPERATOR_NAME"'                     'data-vite-operator-name="${VITE_OPERATOR_NAME}"';
     sub_filter 'data-vite-operator-address="VITE_OPERATOR_ADDRESS"'               'data-vite-operator-address="${VITE_OPERATOR_ADDRESS}"';
     sub_filter 'data-vite-operator-email="VITE_OPERATOR_EMAIL"'                   'data-vite-operator-email="${VITE_OPERATOR_EMAIL}"';

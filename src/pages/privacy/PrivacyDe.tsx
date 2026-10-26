@@ -1,4 +1,4 @@
-import { config, mapStyleHost, parkApiHost } from '../../lib/config';
+import { config, geocoderHost, mapStyleHost, parkApiHost } from '../../lib/config';
 
 export function PrivacyDe() {
   const { operator } = config;
@@ -53,6 +53,12 @@ export function PrivacyDe() {
         <li>
           <strong>Parkdaten (Schnittstelle und Vektorkacheln der ParkAPI):</strong> <code>{parkApiHost}</code>
         </li>
+        {geocoderHost && (
+          <li>
+            <strong>Adress- und Ortssuche (nur bei Eingabe in das Suchfeld, mit dem eingegebenen Text und dem
+            Mittelpunkt des Kartenausschnitts):</strong> <code>{geocoderHost}</code>
+          </li>
+        )}
       </ul>
       <p>
         Dabei werden Ihre IP-Adresse sowie technische Angaben Ihres Browsers an den jeweiligen Server übermittelt;
