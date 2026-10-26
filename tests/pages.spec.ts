@@ -51,9 +51,12 @@ test.describe('pages', () => {
     await page.goto('/open-data');
 
     const table = page.getByTestId('source-table');
-    await expect(table.locator('tbody tr')).toHaveCount(sources.length);
-    // Sorted by name, so the BFRK source comes first.
-    await expect(table.locator('tbody tr').first()).toContainText('keine Angabe');
+    // OpenStreetMap, the data of the background map, comes first and is not a ParkAPI source.
+    await expect(table.locator('tbody tr')).toHaveCount(sources.length + 1);
+    await expect(table.locator('tbody tr').first()).toContainText('OpenStreetMap-Mitwirkende');
+    await expect(table.locator('tbody tr').first()).toContainText('ODbL-1.0');
+    // Sorted by name, so the BFRK source comes next.
+    await expect(table.locator('tbody tr').nth(1)).toContainText('keine Angabe');
     await expect(table.getByRole('row', { name: /Stuttgart Parkhäuser/ })).toContainText('dl-de/by-2-0');
     await expect(table.getByRole('row', { name: /Stuttgart Parkhäuser/ })).toContainText('Landeshauptstadt Stuttgart');
   });

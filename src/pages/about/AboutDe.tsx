@@ -210,6 +210,20 @@ export function AboutDe() {
         </p>
       </Notice>
 
+      <h2>Herkunft: ParkenDD</h2>
+      <p>
+        ParkAPI geht auf <strong>ParkenDD</strong> zurück, ein ehrenamtliches Projekt aus dem Umfeld des OK Lab Dresden
+        (Code for Germany). Ab 2015 zeigte die gleichnamige App die freien Plätze der Dresdner Parkhäuser an. Die Daten
+        dafür lieferte die erste ParkAPI, die die Webseiten städtischer Parkleitsysteme auslas und als einheitliche
+        Schnittstelle bereitstellte. Nach und nach kamen weitere Städte hinzu.
+      </p>
+      <p>
+        Die heutige ParkAPI ist eine Neuentwicklung mit erweitertem Datenmodell, die Fahrräder, Park+Ride und
+        europäische Standards einschließt. Die Wurzeln sind geblieben: Der Quellcode liegt weiterhin in der
+        GitHub-Organisation <a href="https://github.com/ParkenDD">ParkenDD</a>, und die Schnittstellen <code>/v1</code>{' '}
+        und <code>/v2</code> halten Anwendungen der früheren Versionen am Laufen.
+      </p>
+
       <h2>Offen und unabhängig</h2>
       <p>
         ParkAPI ist Open-Source-Software unter MIT-Lizenz. Der Quellcode der{' '}

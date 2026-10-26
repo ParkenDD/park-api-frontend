@@ -91,6 +91,23 @@ export function SourceTable() {
           </tr>
         </thead>
         <tbody>
+          {/* Not a ParkAPI source, but the data of the background map, which is subject to a licence as well. */}
+          <tr data-testid="base-map-source">
+            <td>
+              <a href="https://www.openstreetmap.org">OpenStreetMap</a>
+              <br />
+              <Muted>{t.sources.baseMap}</Muted>
+            </td>
+            <td>
+              <a href="https://www.openstreetmap.org/copyright">{t.map.baseMapAttributionLink}</a>
+            </td>
+            <td>
+              <a href="https://opendatacommons.org/licenses/odbl/">ODbL-1.0</a>
+            </td>
+            <td>
+              <Muted>–</Muted>
+            </td>
+          </tr>
           {sources.map((source) => (
             <tr key={source.id}>
               <td>

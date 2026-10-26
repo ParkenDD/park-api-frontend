@@ -207,6 +207,20 @@ export function AboutEn() {
         </p>
       </Notice>
 
+      <h2>Origin: ParkenDD</h2>
+      <p>
+        ParkAPI goes back to <strong>ParkenDD</strong>, a volunteer project from the circle of OK Lab Dresden (Code for
+        Germany). From 2015 on, the app of the same name showed the free spaces of the car parks in Dresden. Its data
+        came from the first ParkAPI, which read the websites of municipal parking guidance systems and offered them as a
+        uniform interface. Over time, more cities were added.
+      </p>
+      <p>
+        Today&apos;s ParkAPI is a new development with an extended data model that includes bicycles, Park+Ride and
+        European standards. The roots remain: the source code still lives in the{' '}
+        <a href="https://github.com/ParkenDD">ParkenDD</a> GitHub organisation, and the <code>/v1</code> and{' '}
+        <code>/v2</code> interfaces keep applications of the earlier versions running.
+      </p>
+
       <h2>Open and independent</h2>
       <p>
         ParkAPI is open source software under the MIT licence. The source code of the{' '}

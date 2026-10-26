@@ -252,7 +252,8 @@ export function OpenDataEn() {
       <h2 id="sources">Data sources and licences</h2>
       <p>
         The data comes from the sources listed below. Reuse is subject to the licence of the respective source; where it
-        requires attribution, please name the stated contributor. The list is loaded live from the interface.
+        requires attribution, please name the stated contributor. The list is loaded live from the interface. In
+        addition, there is OpenStreetMap, whose data the background map is based on.
       </p>
       <Notice>
         <p>

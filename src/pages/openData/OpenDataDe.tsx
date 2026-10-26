@@ -252,7 +252,7 @@ export function OpenDataDe() {
       <p>
         Die Daten stammen von den unten aufgeführten Quellen. Für die Weiterverwendung gilt die Lizenz der jeweiligen
         Quelle; ist dort eine Namensnennung vorgesehen, geben Sie bitte den genannten Datengeber an. Die Liste wird live
-        aus der Schnittstelle geladen.
+        aus der Schnittstelle geladen. Hinzu kommt OpenStreetMap, dessen Daten der Hintergrundkarte zugrunde liegen.
       </p>
       <Notice>
         <p>
