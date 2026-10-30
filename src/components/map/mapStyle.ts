@@ -99,6 +99,12 @@ export const labelFilter = (showOnStreetDetails: boolean): ExpressionSpecificati
   showOnStreetDetails ? true : ['!=', ['get', 'type'], 'ON_STREET'],
 ];
 
+/**
+ * Where labels collide, the one with the lowest key is placed and hides the others. Larger parking sites come first,
+ * as they matter to more people.
+ */
+export const labelSortKey: ExpressionSpecification = ['-', ['coalesce', ['get', 'capacity'], ['get', 'free_capacity'], 0]];
+
 // Has to be one of the fonts the glyphs of the base map style provide.
 export const LABEL_FONT = ['Open Sans Bold'];
 export const LABEL_TEXT_SIZE = 12;

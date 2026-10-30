@@ -45,6 +45,7 @@ import {
   labelAnchor,
   labelFilter,
   labelOffset,
+  labelSortKey,
   labelText,
   outlineWidth,
 } from './mapStyle';
@@ -217,6 +218,7 @@ export function ParkingMap({
           filter: labelFilter(showOnStreetDetailsRef.current),
           layout: {
             'text-field': labelText,
+            'symbol-sort-key': labelSortKey,
             'text-font': LABEL_FONT,
             'text-size': LABEL_TEXT_SIZE,
             'text-anchor': labelAnchor,
